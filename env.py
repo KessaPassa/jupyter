@@ -3,7 +3,7 @@ from collections import namedtuple
 
 
 def BASE_DIR_NAME():
-    return '20190402'
+    return '20190803'
 
 
 def SCENARGIE_DIR():
@@ -21,24 +21,55 @@ def ROOT_DIR():
 
 
 def DIR_LIST():
-    return ['p10000', 'p20000', 'p30000']
+    return ['p10000', 'p20000']
+    # return ['p10000', 'p20000', 'p30000']
 
 
 def RATIO_LIST():
     return ['r4', 'r5', 'r6']
 
+def SEED_LIST():
+    return  ['s' + str(123 + i) for i in range(MAX_SEED_COUNT())]
+
+def CSV_LIST():
+    return ['mobile', 'census', 'od']
 
 def MAX_SEED_COUNT():
     return 1
 
+def AREA_ONE_LENGTH():
+    return 9
 
 def MAX_AREA_COUNT():
-    one_length = 9
-    return one_length * one_length
+    return AREA_ONE_LENGTH() * AREA_ONE_LENGTH()
+
+def AREA_LIST():
+    return [str(i) for i in range(MAX_AREA_COUNT())]
+
+def AREA_LIST_CONTOUR():
+    return [area_to_contour(i) for i in range(MAX_AREA_COUNT())]
 
 
 def MAX_TIME_COUNT():
     return 6
+
+def TIMES_LIST():
+    return [str(3600 * (i + 1)) for i in range(MAX_TIME_COUNT())]
+
+# 二次元表現からエリア番号
+def contour_to_area(contour_id):
+    contour_id = str(contour_id)
+    left = int(contour_id[0]) * AREA_ONE_LENGTH()
+    right = int(contour_id[1])
+    
+    return left+right
+
+# エリア番号から二次元表現
+def area_to_contour(area_id):
+    area_id = int(area_id)
+    left = str(area_id // AREA_ONE_LENGTH())
+    right = str(area_id % AREA_ONE_LENGTH()) + '0'
+    return left+right
 
 
 # ファイルを読み込むためのfor文で使う引数
@@ -97,7 +128,7 @@ def get_for_list(csv=None):
     dir_list = DIR_LIST()
     ratio_list = RATIO_LIST()
     seed_list = ['s' + str(123 + i) for i in range(MAX_SEED_COUNT())]
-    csv_list = ['census', 'mobile']
+    csv_list = CSV_LIST()
     if csv is not None:
         csv_list = csv
 
@@ -132,5 +163,3 @@ def for_default(func, csv=None):
                     args = ARGS_FOR_LIST(_dir, _ratio, _seed, _csv)
                     func(args)
 
-def hoge():
-    print('hoge')
