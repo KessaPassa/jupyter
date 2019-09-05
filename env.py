@@ -21,12 +21,14 @@ def ROOT_DIR():
 
 
 def DIR_LIST():
-    return ['p10000', 'p20000']
+    return ['p10000']
+    # return ['p10000', 'p20000']
     # return ['p10000', 'p20000', 'p30000']
 
 
 def RATIO_LIST():
-    return ['r4', 'r5', 'r6']
+    return ['r4']
+    # return ['r4', 'r5', 'r6']
 
 def SEED_LIST():
     return  ['s' + str(123 + i) for i in range(MAX_SEED_COUNT())]
@@ -58,7 +60,13 @@ def TIMES_LIST():
 
 # 二次元表現からエリア番号
 def contour_to_area(contour_id):
-    contour_id = str(contour_id)
+    contour_id = str(int(contour_id))
+    if len(contour_id) == 1:
+        contour_id = contour_id.ljust(2, '0')
+        
+    if len(contour_id) == 2:
+        contour_id = contour_id.zfill(3)
+        
     left = int(contour_id[0]) * AREA_ONE_LENGTH()
     right = int(contour_id[1])
     
@@ -163,3 +171,26 @@ def for_default(func, csv=None):
                     args = ARGS_FOR_LIST(_dir, _ratio, _seed, _csv)
                     func(args)
 
+
+def for_exclude_csv_init(func, array):
+    for_list = get_for_list()
+
+    for _dir in for_list.dir:
+        array[_dir] = {}
+
+        for _ratio in for_list.ratio:
+            array[_dir][_ratio] = {}
+
+            for _seed in for_list.seed:
+                array[_dir][_ratio][_seed] = {}
+                args = ARGS_FOR_LIST(_dir, _ratio, _seed, '')
+                func(args, array)
+
+
+def for_exclude_csv(func):
+    for_list = get_for_list()
+    for _dir in for_list.dir:
+        for _ratio in for_list.ratio:
+            for _seed in for_list.seed:
+                args = ARGS_FOR_LIST(_dir, _ratio, _seed, '')
+                func(args)
