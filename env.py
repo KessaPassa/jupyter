@@ -194,3 +194,8 @@ def for_exclude_csv(func):
             for _seed in for_list.seed:
                 args = ARGS_FOR_LIST(_dir, _ratio, _seed, '')
                 func(args)
+
+        
+
+
+        
